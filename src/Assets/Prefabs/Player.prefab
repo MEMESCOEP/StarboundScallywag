@@ -98,7 +98,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6112115661782909214}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: fd1657f27b018ba3989fe89fef2abf2d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -155,6 +155,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCam: {fileID: 0}
   orientation: {fileID: 6371042475823402277}
+  WallrunningTriggers: []
+  Health: 100
   LerpSpeed: 5
   sensMultiplier: 1
   sensitivity: 75

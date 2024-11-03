@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/healthBar.uss?fileID=7433441132597879392&amp;guid=d7d75e1a0e0c74d489bba67c5b34be70&amp;type=3#healthBar" />
+    <ui:VisualElement name="Container" style="flex-grow: 1; flex-direction: row; justify-content: space-between;" />
+</ui:UXML>
