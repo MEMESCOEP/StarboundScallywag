@@ -1,5 +1,6 @@
 // Some stupid rigidbody based movement by Dani
 
+using System.Collections.Generic;
 using System;
 using UnityEngine;
 
@@ -8,9 +9,12 @@ public class PlayerMovement : MonoBehaviour {
     //Assingables
     public Transform playerCam;
     public Transform orientation;
+    public Collider[] WallrunningTriggers;
 
     //Other
+    public float Health = 100f;
     private Rigidbody rb;
+    private List<PhysicsTrigger> Triggers = new List<PhysicsTrigger>();
 
     //Rotation and look
     public float LerpSpeed = 5f;
@@ -22,12 +26,16 @@ public class PlayerMovement : MonoBehaviour {
     private float LerpRot = 0f;
     private bool WaitForZeroTilt = false;
 
+
     //Movement
     public float SpeedMultiplier = 5f;
-    public float moveSpeed = 4500;
-    public float maxSpeed = 20;
+    public float moveSpeed = 4000;
+    public float maxSpeed = 15;
     public bool grounded;
     public LayerMask whatIsGround;
+    private int WallrunDir = 0;
+    private bool IsWallrunning = false;
+    private bool JumpedOffWall = false;
 
     public float counterMovement = 0.175f;
     private float threshold = 0.01f;
@@ -61,6 +69,12 @@ public class PlayerMovement : MonoBehaviour {
         playerScale =  transform.localScale;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        GetComponent<MeshRenderer>().enabled = false;
+
+        foreach (var Trigger in WallrunningTriggers)
+        {
+            Triggers.Add(Trigger.GetComponent<PhysicsTrigger>());
+        }
     }
 
 
@@ -137,8 +151,8 @@ public class PlayerMovement : MonoBehaviour {
         //Some multipliers
         float multiplier = 1f, multiplierV = 1f;
 
-        // Movement in air
-        if (!grounded) {
+        // Movement while in air and not wallrunning
+        if (!grounded && IsWallrunning == false) {
             multiplier = 0.5f;
             multiplierV = 0.5f;
         }
@@ -155,19 +169,36 @@ public class PlayerMovement : MonoBehaviour {
         //Apply forces to move player
         rb.AddForce(orientation.transform.forward * y * moveSpeed * Time.deltaTime * multiplier * multiplierV);
         rb.AddForce(orientation.transform.right * x * moveSpeed * Time.deltaTime * multiplier);
+
+        // Set y velocity to zero if the player is wall running
+        if (IsWallrunning == true && jumping == false && JumpedOffWall == false)
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+        }
     }
 
     private void Jump() {
-        if (grounded && readyToJump) {
+        if ((grounded || IsWallrunning) && readyToJump) {
             readyToJump = false;
 
             //Add jump forces
-            rb.AddForce(Vector2.up * jumpForce * 1.5f);
-            rb.AddForce(normalVector * jumpForce * 0.5f);
+            if (IsWallrunning == true)
+            {
+                JumpedOffWall = true;
+                Invoke(nameof(ResetWallrunning), 0.25f);
+                rb.AddForce(orientation.right * jumpForce * 1.75f * WallrunDir);
+                rb.AddForce(Vector2.up * jumpForce * 1.75f);
+                rb.AddForce(normalVector * jumpForce * 0.5f);
+            }
+            else
+            {
+                rb.AddForce(Vector2.up * jumpForce * 1.5f);
+                rb.AddForce(normalVector * jumpForce * 0.5f);
+            }
 
-            //If jumping while falling, reset y velocity.
+            //If jumping while falling and not wallrunning, reset y velocity.
             Vector3 vel = rb.linearVelocity;
-            if (rb.linearVelocity.y < 0.5f)
+            if (rb.linearVelocity.y < 0.5f && IsWallrunning == false)
                 rb.linearVelocity = new Vector3(vel.x, 0, vel.z);
             else if (rb.linearVelocity.y > 0)
                 rb.linearVelocity = new Vector3(vel.x, vel.y / 2, vel.z);
@@ -178,6 +209,11 @@ public class PlayerMovement : MonoBehaviour {
 
     private void ResetJump() {
         readyToJump = true;
+    }
+
+    private void ResetWallrunning() {
+        IsWallrunning = false;
+        JumpedOffWall = false;
     }
 
     private float desiredX;
@@ -194,24 +230,56 @@ public class PlayerMovement : MonoBehaviour {
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         //Perform the rotations
-        if (x == 0 || WaitForZeroTilt == true)
+        foreach (var Trigger in Triggers)
         {
-            LerpRot = Mathf.Lerp(LerpRot, 0, Time.deltaTime * LerpSpeed);
-
-            if (LerpRot < 0.5f)
+            if (Trigger.ColliderTag == "Right" && Trigger.IsColliding == true && Trigger.CollidingObject.transform.tag == "Wall")
             {
-                WaitForZeroTilt = false;
+                IsWallrunning = true;
+                PrevDir = -1;
+                WallrunDir = -1;
+                rb.useGravity = false;
+                break;
+            }
+            else if (Trigger.ColliderTag == "Left" && Trigger.IsColliding == true && Trigger.CollidingObject.transform.tag == "Wall")
+            {
+                IsWallrunning = true;
+                PrevDir = 1;
+                WallrunDir = 1;
+                rb.useGravity = false;
+                break;
+            }
+            else
+            {
+                rb.useGravity = true;
+                IsWallrunning = false;
+            }
+        }
+
+        if (IsWallrunning == false)
+        {
+            if (x == 0 || WaitForZeroTilt == true)
+            {
+                LerpRot = Mathf.Lerp(LerpRot, 0, Time.deltaTime * LerpSpeed);
+
+                if (LerpRot < 0.5f)
+                {
+                    WaitForZeroTilt = false;
+                }
+            }
+            else
+            {
+                if (PrevDir != x)
+                {
+                    //WaitForZeroTilt = true;
+                }
+
+                LerpRot = Mathf.Lerp(LerpRot, CameraTiltAngle, Time.deltaTime * LerpSpeed);
+                PrevDir = x;
             }
         }
         else
         {
-            if (PrevDir != x)
-            {
-                //WaitForZeroTilt = true;
-            }
-
-            LerpRot = Mathf.Lerp(LerpRot, CameraTiltAngle, Time.deltaTime * LerpSpeed);
-            PrevDir = x;
+            LerpRot = Mathf.Lerp(LerpRot, CameraTiltAngle + 5, Time.deltaTime * (LerpSpeed + 5));
         }
 
         playerCam.transform.localRotation = Quaternion.Euler(xRotation, desiredX, LerpRot * -PrevDir);
