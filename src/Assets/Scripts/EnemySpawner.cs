@@ -29,7 +29,7 @@ public class EnemySpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (SpawnedEnemies.Count <= 0)
+        if (SpawnedEnemies.Count <= 0 && UnlockedRooms < 4)
         {
             UnlockNewRoom(FirstTime);
             SpawnEnemies();
@@ -42,9 +42,7 @@ public class EnemySpawner : MonoBehaviour
         {
             if (SpawnedEnemies[EnemyIndex - 1] == null)
             {
-                print($"Removing enemy at index {EnemyIndex - 1}");
                 SpawnedEnemies.RemoveAt(EnemyIndex - 1);
-                print($"FirstTime is {FirstTime}.");
             }
         }
     }

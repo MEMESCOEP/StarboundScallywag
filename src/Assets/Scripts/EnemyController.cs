@@ -66,7 +66,9 @@ public class EnemyController : MonoBehaviour
             return;
         }
 
-        if (Vector3.Distance(Rb.position, Player.transform.position) > DetectionRange && AttackType != AttackTypes.RangedStationary)
+        float PlayerDistance = Vector3.Distance(Rb.position, Player.transform.position);
+
+        if (PlayerDistance > DetectionRange && AttackType != AttackTypes.RangedStationary)
         {
             if (AttackType == AttackTypes.MeleeHit && (AnimationController.GetBool("IsWalking") == true || AnimationController.GetBool("Attacking") == true))
             {
@@ -74,7 +76,7 @@ public class EnemyController : MonoBehaviour
                 AnimationController.SetBool("IsWalking", false);
             }
         }
-        else if (Vector3.Distance(Rb.position, Player.transform.position) > StopDistance && AttackType != AttackTypes.RangedStationary)
+        else if (PlayerDistance > StopDistance && AttackType != AttackTypes.RangedStationary)
         {
             if (AttackType == AttackTypes.MeleeHit && AnimationController.GetBool("IsWalking") == false)
             {
@@ -114,7 +116,7 @@ public class EnemyController : MonoBehaviour
                     break;
             }
         }
-        else if (Vector3.Distance(Rb.position, Player.transform.position) > 1f && AttackType != AttackTypes.RangedStationary && DealtDamage == false)
+        else if (PlayerDistance > 1f && AttackType != AttackTypes.RangedStationary && DealtDamage == false)
         {
             DealtDamage = true;
 
