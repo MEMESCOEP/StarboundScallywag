@@ -19388,7 +19388,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8073015690348081794, guid: bace9efbcd5dac2eaad18ae22d14650c, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8878907145323547637, guid: bace9efbcd5dac2eaad18ae22d14650c, type: 3}
       propertyPath: RoomNumber
@@ -48341,8 +48341,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a556089b3f41c454bc8e447fac01c60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BreakOutMaterialAccent: {fileID: 2100000, guid: 3e26605e4ab44d947993d277cc0b063a, type: 2}
-  BreakOutMaterialWall: {fileID: 2100000, guid: 34394378f28735441a3292597b90b9a1, type: 2}
+  BreakOutMaterialAccent: {fileID: 2100000, guid: 944ade60a344a7b469eeb8904ed323b6, type: 2}
+  BreakOutMaterialWall: {fileID: 2100000, guid: 870865f6f73afe445b57b1ab33e8fef3, type: 2}
+  DefaultMaterialAccent: {fileID: 2100000, guid: 3e26605e4ab44d947993d277cc0b063a, type: 2}
+  DefaultMaterialWall: {fileID: 2100000, guid: 34394378f28735441a3292597b90b9a1, type: 2}
   FinalBoss: {fileID: 1978777905}
 --- !u!1 &1691103324
 GameObject:
