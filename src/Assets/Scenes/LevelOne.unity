@@ -40136,6 +40136,14 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 3853268898807207900, guid: aee297da50f0f4da1976145daf789f96, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 93e223f68975a8a40a3e8d970021342f, type: 2}
+    - target: {fileID: 6148737315974723067, guid: aee297da50f0f4da1976145daf789f96, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 34394378f28735441a3292597b90b9a1, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
