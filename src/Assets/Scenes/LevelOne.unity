@@ -19388,7 +19388,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8073015690348081794, guid: bace9efbcd5dac2eaad18ae22d14650c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8878907145323547637, guid: bace9efbcd5dac2eaad18ae22d14650c, type: 3}
       propertyPath: RoomNumber
@@ -48325,9 +48325,9 @@ MonoBehaviour:
   - {fileID: 3905257309984388374, guid: e90e02ce5ffc42d75ae592c1ee82b10a, type: 3}
   - {fileID: 145359932069509079, guid: 0bead0896968ca1f59eeb52e6232ccdd, type: 3}
   PlayerObject: {fileID: 1346049674}
-  SpawnCountIncrease: 5
+  SpawnCountIncrease: 2
   UnlockedRooms: 0
-  SpawnCount: 10
+  SpawnCount: 5
   SpawnedEnemies: []
 --- !u!114 &1688854351
 MonoBehaviour:
