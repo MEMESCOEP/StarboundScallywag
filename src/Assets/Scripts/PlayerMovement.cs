@@ -3,10 +3,12 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour {
 
     //Assingables
+    public TextMeshProUGUI HealthDisplay;
     public Transform playerCam;
     public Transform orientation;
     public Collider[] WallrunningTriggers;
@@ -85,6 +87,8 @@ public class PlayerMovement : MonoBehaviour {
     private void Update() {
         MyInput();
         Look();
+
+        HealthDisplay.text = $"Health: {Health}";
     }
 
     /// <summary>
@@ -232,6 +236,12 @@ public class PlayerMovement : MonoBehaviour {
         //Perform the rotations
         foreach (var Trigger in Triggers)
         {
+            if (grounded == true)
+            {
+                IsWallrunning = false;
+                continue;
+            }
+
             if (Trigger.ColliderTag == "Right" && Trigger.IsColliding == true && Trigger.CollidingObject.transform.tag == "Wall")
             {
                 IsWallrunning = true;

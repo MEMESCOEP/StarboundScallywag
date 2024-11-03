@@ -4,7 +4,9 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     /* VARIABLES */
+    public GameObject BulletPrefab;
     public GameObject Crosshair;
+    public Transform BarrelEnd;
     public Camera PlayerCamera;
     public float GunDamage = 10f;
     public float GunRange = 500f;
@@ -51,6 +53,11 @@ public class Gun : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            // Instantiate the bullet at the fire point's position and rotation
+            GameObject bullet = Instantiate(BulletPrefab, BarrelEnd.position, BarrelEnd.rotation);
+            Vector3 endPoint = BarrelEnd.position + BarrelEnd.forward * GunRange;
+            bullet.GetComponent<LineRenderer>().SetPositions(new Vector3[] {BarrelEnd.position, endPoint});
+
             if (AimingAtEnemy == true && RayHit.transform.gameObject != null)
             {
                 RayHit.transform.gameObject.GetComponent<EnemyController>().HurtEnemy(GunDamage);
