@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <Style src="project://database/Assets/healthProgress.uss?fileID=7433441132597879392&amp;guid=50e4924bd475a7d4281c44159d629fb1&amp;type=3#healthProgress" />
+    <ui:ProgressBar value="22" title="my-progress" />
+</ui:UXML>
